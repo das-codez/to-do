@@ -1,35 +1,30 @@
-import useTheme from '@/hooks/useTheme';
+import useTheme, { ColorScheme } from '@/hooks/useTheme';
 import { Link } from '@react-navigation/native';
 import { useMutation, useQuery } from 'convex/react';
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View, } from "react-native";
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
 import {api} from "@/convex/_generated/api";
+import { createHomeStyles } from '@/assets/styles/home.styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import {LinearGradient} from "expo-linear-gradient";
+import Header from '@/components/Header';
 
 
 export default function Index() {
-  const {toggleDarkMode} = useTheme();
+  const {toggleDarkMode, colors} = useTheme();
 
-  
+  const homeStyles = createHomeStyles(colors);
   
 
   return (
-    <View style={styles.container}>
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <LinearGradient colors={colors.gradients.background} style={homeStyles.container}>
+      <StatusBar barStyle={colors.statusBarStyle}/>
+    <SafeAreaView style={homeStyles.safeArea}>
+      <Header/>
       <TouchableOpacity onPress={toggleDarkMode}><Text>Toggle the mode</Text></TouchableOpacity>
-     </View>
+     </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 
- const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "red",
-
-  },
-  content:{
-    fontSize: 52,
-  }
- })
