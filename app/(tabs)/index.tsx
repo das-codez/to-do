@@ -12,6 +12,7 @@ import TodoInput from '@/components/TodoInput';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { Doc, Id } from '@/convex/_generated/dataModel';
 import { Ionicons } from '@expo/vector-icons';
+import EmptyState from '@/components/EmptyState';
 
 type Todo = Doc<"todos">
 
@@ -22,6 +23,7 @@ export default function Index() {
   const homeStyles = createHomeStyles(colors);
   const todos = useQuery(api.todos.getTodos);
   const toggleTodo = useMutation(api.todos.toggleTodo);
+  const deleteTodo = useMutation(api.todos.deleteTodo);
 
   const isLoading = todos === undefined;
 
@@ -35,6 +37,13 @@ export default function Index() {
       console.log("Error toggling todo", error);
       Alert.alert("Error", "Failed to toggle todo");
     }
+  }
+  const handleDeleteTodo = async (id: Id<"todos">) => {
+    Alert.alert("Delete Todo", "Are you sure you want to delete this todo?", [
+      {text:"Cancel", style:"cancel"},
+      {text:"Delete", style:"destructive", onPress: () => deleteTodo({id})},
+
+    ])
   }
 
   const renderTodoItem = ({item}: {item:Todo}) => {
@@ -79,6 +88,22 @@ export default function Index() {
             >
               {item.text}
             </Text>
+
+
+            <View style={homeStyles.todoActions}>
+              <TouchableOpacity onPress={() => {}} activeOpacity={0.8}>
+                <LinearGradient colors={colors.gradients.warning} style=
+                {homeStyles.actionButton}>
+                  <Ionicons name="pencil" size={14} color="#fff"/>
+                </LinearGradient>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=> handleDeleteTodo(item._id)} activeOpacity={0.8}>
+                <LinearGradient colors={colors.gradients.danger} style=
+                {homeStyles.actionButton}>
+                  <Ionicons name="trash" size={14} color="#fff"/>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
           </View>
         </LinearGradient>
         
@@ -99,6 +124,8 @@ export default function Index() {
           keyExtractor={(item) => item._id}
           style={homeStyles.todoList}
           contentContainerStyle={homeStyles.todoListContent}
+          ListEmptyComponent={<EmptyState/>}
+          showsVerticalScrollIndicator={false} //can remove
           />
 
      </SafeAreaView>
