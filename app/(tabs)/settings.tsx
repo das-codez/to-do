@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import ProgressStats from '@/components/ProgressStats';
 import Preferences from '@/components/Preferences';
+import DangerZone from '@/components/DangerZone';
 
 const SettingsScreen = () => {
   
@@ -37,6 +38,7 @@ const SettingsScreen = () => {
 
             {/*Preferences*/}
             <Preferences />
+            <DangerZone/>
 
           </ScrollView>
         </SafeAreaView>
